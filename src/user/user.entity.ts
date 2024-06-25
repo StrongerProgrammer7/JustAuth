@@ -1,4 +1,4 @@
-import { Table,Column,Model,DataType,HasMany } from 'sequelize-typescript';
+import { Table,Column,Model,DataType,HasOne } from 'sequelize-typescript';
 import { Token } from 'src/token/token.entity';
 
 @Table({ tableName: 'users' })
@@ -29,6 +29,6 @@ export class User extends Model<User>
 	@Column(DataType.STRING)
 	activationLink: string;
 
-	@HasMany(() => Token)
+	@HasOne(() => Token)
 	refreshToken: Token[];
 }

@@ -8,7 +8,7 @@ export class Token extends Model<Token>
 	@Column(
 		{
 			allowNull: false,
-			type: DataType.STRING
+			type: DataType.STRING(1000)
 		}
 	)
 	refreshToken: string;

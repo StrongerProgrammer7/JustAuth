@@ -8,3 +8,10 @@ export class TokenDto
 	readonly refreshToken: string;
 
 }
+
+
+export class GenerateTokenDto
+{
+	readonly refreshToken: string;
+	readonly accessToken: string;
+}
