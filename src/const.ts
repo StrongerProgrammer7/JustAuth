@@ -1,0 +1,5 @@
+export enum Consts
+{
+	SEQUELIZE = 'SEQUELIZE',
+	USERREPO = 'USERS_REPOSITORY'
+}
