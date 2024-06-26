@@ -31,7 +31,7 @@ export const getCookie = (name: string): string | undefined | unknown =>
 	}
 };
 
-export const setCookieDocument = (name: string,value: string,max_age?: number,extDays = 1,path = "/") =>
+export const setCookieDocument = (name: string,value: string,max_age?: number,path = "/") =>
 {
 	try 
 	{

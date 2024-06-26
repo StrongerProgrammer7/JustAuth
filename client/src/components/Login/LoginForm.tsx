@@ -1,6 +1,7 @@
 
 import { useContext,useReducer } from "react";
 import { Context } from "../../App";
+import { observer } from "mobx-react-lite";
 
 type IAction =
 	{
@@ -75,4 +76,4 @@ const LoginForm = () =>
 	);
 };
 
-export default LoginForm;
+export default observer(LoginForm);

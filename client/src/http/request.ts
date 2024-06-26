@@ -2,8 +2,8 @@ import axios,{ AxiosError,AxiosRequestConfig,AxiosResponse,InternalAxiosRequestC
 
 import { API_URL } from "../utils/const";
 import { EToken } from "../utils/enums";
-import { getCookie } from "../utils/helper";
-import { IErrorAxios } from "../utils/interfaces/AuthReponse";
+import { getCookie,handleError,parseToken,setCookieDocument } from "../utils/helper";
+import { IAuthResponse,IErrorAxios } from "../utils/interfaces/AuthReponse";
 
 const api = axios.create(
 	{
@@ -25,6 +25,30 @@ api.interceptors.request.use(
 	},
 	(error) => Promise.reject(error)
 );
+
+api.interceptors.response.use((config) =>
+{
+	return config;
+},async (error) =>
+{
+	const originalRequest = error.config;
+	if (error.response.status == 401 && error.config && !error.config._isRetry)
+	{
+		originalRequest._isRetry = true;
+		try
+		{
+
+			const response = await axios.get<IAuthResponse>(`${API_URL}/refresh`,{ withCredentials: true });
+			const payloadToken = parseToken(response.data.accessToken);
+			setCookieDocument(EToken.ACCESS_TOKEN,response.data.accessToken,payloadToken.exp);
+			return api.request(originalRequest);
+		} catch (err)
+		{
+			handleError('api.interceptors.response.use',``,err);
+		}
+	}
+	throw error;
+});
 
 export async function getDataAxios<T>(url: string): Promise<AxiosResponse<T>>
 {

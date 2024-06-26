@@ -1,6 +1,6 @@
 export interface IUser
 {
-	email: string;
+	login: string;
 	id: string;
 	isActivationLink: boolean;
 	picture: string;
