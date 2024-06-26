@@ -3,4 +3,6 @@ export enum Consts
 	SEQUELIZE = 'SEQUELIZE',
 	USERREPO = 'USERS_REPOSITORY',
 	TOKENREPO = 'TOKEN_REPOSITORY',
+	REFRESH_TOKEN = 'refreshToken',
+	ACCESS_TOKEN = 'accessToken'
 }
