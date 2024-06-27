@@ -12,8 +12,8 @@ interface IInputs
 }
 const initialInput: IInputs =
 {
-	email: 'halif41026@luravel.com',
-	password: '1234'
+	email: '',
+	password: ''
 };
 
 const inputReducer = (state: IInputs,action: IAction) =>

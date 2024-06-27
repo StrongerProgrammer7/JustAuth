@@ -49,6 +49,7 @@ const LoginForm = () =>
 				type="email"
 				placeholder="email"
 				value={state.email}
+				required
 			/>
 			<input
 				className={css.form__input}
@@ -56,6 +57,7 @@ const LoginForm = () =>
 				type="password"
 				placeholder="password"
 				value={state.password}
+				required
 			/>
 			{
 				store.isLoad
