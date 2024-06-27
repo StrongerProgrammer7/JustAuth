@@ -6,6 +6,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { IUser } from '../../utils/interfaces/IUser';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 interface ITableUser
 {
@@ -13,9 +14,13 @@ interface ITableUser
 }
 export default function TableUser({ users }: ITableUser)
 {
+	const matches = useMediaQuery('(min-width:750px)');
 	return (
 		<TableContainer component={Paper}>
-			<Table sx={{ minWidth: 650 }} aria-label="simple table">
+			<Table
+				sx={{ minWidth: matches ? 650 : 50 }}
+				aria-label="collapsible table"
+			>
 				<TableHead>
 					<TableRow>
 						<TableCell>id</TableCell>

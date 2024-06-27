@@ -8,11 +8,16 @@
 - Vite
 - Typescript
 
+## RUN 
+- `cd server && npm run start`
+- `cd client && npm run dev`
+- Go to http://localhost:5173
+
 ## View
 
+- Movie to imagesReadme/JustAuth.mp4
 ![Entry](./imagesReadme/Entry.png)
 ![Spinner](./imagesReadme/Spinner.png)
 ![Table](./imagesReadme/Table.png)
-<video width="420" height="340" controls>
-  <source src="./imagesReadme/JustAuth.mp4" type="video/mp4">
-</video>
+![Gif](./imagesReadme/JustAuth.gif)
+
