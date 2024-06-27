@@ -83,9 +83,9 @@ const LoginForm = () =>
 					{
 						!store.isRegistration
 							?
-							<span className={css.form__link_span}>Sign up <ArrowRightAltIcon /></span>
+							<span data-testid="cypress-btn" className={css.form__link_span}>Sign up <ArrowRightAltIcon /></span>
 							:
-							<span className={css.form__link_span}>Sign in <ArrowRightAltIcon /></span>
+							<span data-testid="cypress-btn" className={css.form__link_span}>Sign in <ArrowRightAltIcon /></span>
 					}
 				</LinkBtn>
 

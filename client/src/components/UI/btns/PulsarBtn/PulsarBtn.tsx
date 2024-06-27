@@ -11,8 +11,10 @@ const PulsarBtn: FC<IPulsarBtn> = ({ title,onClick }) =>
 	return (
 		<div className={css.btn_container}>
 			<button
+				data-testid={`cypress-pulsar-btn-${title}`}
 				className={css.btn}
-				onClick={onClick}>{title}</button>
+				onClick={onClick}>{title}
+			</button>
 		</div>
 	);
 };
