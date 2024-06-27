@@ -19,13 +19,20 @@ export class UserService
 
 	}
 
+	private getUserForToken(user: User)
+	{
+		return {
+			id: user.id,
+			login: user.login,
+		};
+	}
 	async registration(email: string,password: string): Promise<ResponseDto>
 	{
 		const candidate = await this.userRepository.findOne({ where: { login: email } });
 		if (candidate)
-			throw ApiError.BadRequest('User is exists already');
+			throw ApiError.BadRequest('User registered already');
 
-		const hashPassowrd = await bcrypt.hash(password,16);
+		const hashPassowrd = await bcrypt.hash(password,5);
 		const activationLink = uuid.v4();
 		const user = await this.userRepository.create(
 			{
@@ -35,17 +42,17 @@ export class UserService
 			});
 
 		await this.mailService.sendActivationMail(email,`${process.env.API_URL}/api/activate/${activationLink}`);
-		const userDto: ResUserDto = {
-			id: user.id,
-			login: user.login,
-			picture: user.picture,
-			activationLink: user.activationLink,
-			isActivationLink: user.isActivationLink
-		};
-		const tokens = this.tokenService.generateToken(userDto);
+
+		const tokens = this.tokenService.generateToken(this.getUserForToken(user));
 		await this.tokenService.saveToken(user.id,tokens.refreshToken);
 		return {
-			...tokens,user: userDto
+			...tokens,
+			user:
+			{
+				login: user.login,
+				id: user.id,
+				isActivationLink: user.isActivationLink
+			}
 		};
 	}
 
@@ -68,17 +75,15 @@ export class UserService
 		if (!isPassEquals)
 			throw ApiError.BadRequest('Not correct password');
 
-		const userDto: ResUserDto = {
-			id: user.id,
-			login: user.login,
-			picture: user.picture,
-			activationLink: user.activationLink,
-			isActivationLink: user.isActivationLink
-		};
-		const tokens = this.tokenService.generateToken(userDto);
+		const tokens = this.tokenService.generateToken(this.getUserForToken(user));
 		await this.tokenService.saveToken(user.id,tokens.refreshToken);
 		return {
-			...tokens,user: userDto
+			...tokens,user:
+			{
+				login: user.login,
+				id: user.id,
+				isActivationLink: user.isActivationLink
+			}
 		};
 
 	}
@@ -98,17 +103,17 @@ export class UserService
 			throw ApiError.UnAuthorizedError();
 
 		const user = await this.userRepository.findByPk(userData.id);
-		const userDto: ResUserDto = {
-			id: user.id,
-			login: user.login,
-			picture: user.picture,
-			activationLink: user.activationLink,
-			isActivationLink: user.isActivationLink
-		};
-		const tokens = this.tokenService.generateToken(userDto);
+
+		const tokens = this.tokenService.generateToken(this.getUserForToken(user));
 		await this.tokenService.saveToken(user.id,tokens.refreshToken);
 		return {
-			...tokens,user: userDto
+			...tokens,
+			user:
+			{
+				login: user.login,
+				id: user.id,
+				isActivationLink: user.isActivationLink
+			}
 		};
 	}
 
