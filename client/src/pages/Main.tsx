@@ -1,16 +1,18 @@
 import { useContext,useEffect,useState } from "react";
-import LoginForm from "../components/Login/LoginForm";
+import Form from "../components/Form/Form";
 import { Context } from "../App";
 import { getCookie } from "../utils/helper";
 import { EToken } from "../utils/enums";
 import { observer } from "mobx-react-lite";
-import { IUser } from "../utils/interfaces/IUser";
-import { getDataAxios } from "../http/request";
+import css from './main.module.css';
+
+import SimpleModal from "../components/Modal/SimpleModal";
+import Content from "../layouts/Content/Content";
 
 const Main = () =>
 {
 	const { store } = useContext(Context);
-	const [users,setUsers] = useState<IUser[]>([]);
+	const [animationLessSizeBlock,setAnimLessSizeBlock] = useState<string>("");
 	useEffect(() =>
 	{
 		const refresh = async () =>
@@ -22,49 +24,54 @@ const Main = () =>
 		refresh();
 	},[]);
 
-	const logout = () => 
+	useEffect(() =>
 	{
-		store.logout();
-	};
-
-	const getUsers = async () =>
-	{
-		try 
+		let timerId = undefined;
+		if (store.isAuth)
 		{
-			const response = await getDataAxios<IUser[]>('/users');
-			setUsers(response.data);
-		} catch (error) 
-		{
-			console.log('error',error);
+			clearTimeout(timerId);
+			setAnimLessSizeBlock(css.less_size_block);
 		}
-	};
-	if (store.isLoad)
-		return (
-			<h1>Loading...</h1>
-		);
-	if (!store.isAuth)
-		return (
-			<LoginForm />
+		else
+			timerId = setTimeout(() =>
+			{
+				setAnimLessSizeBlock("");
+			},1500);
+		return () =>
+		{
+			if (timerId)
+				clearTimeout(timerId);
+		};
+	},[store.isAuth]);
 
-		);
+	const clearErrorMessage = () =>
+	{
+		store.setMessage("");
+	};
+
 
 	return (
-		<div>
-			<h1>User is entry</h1>
-			<h2>Email: {store.user.login} | {store.user.isActivationLink ? "Activated" : "Not activated"}</h2>
-			<button onClick={logout}>Logout</button>
-			<button onClick={getUsers}>Get users</button>
-			{
-				users.map((user) =>
-				{
-					return (
-						<div key={user.id}>
-							{user.login}
-						</div>
-					);
-				})
-			}
+		<div className={css.main} >
+			<div className={`${css.main_wrapper} ${store.isAuth ? css.main_content : animationLessSizeBlock}`} >
 
+				{
+					!store.isAuth
+						?
+						<div className={css.main_opacity_content}>
+							<Form />
+						</div>
+						:
+						<Content />
+				}
+
+			</div>
+			{
+				store.message.length > 0 &&
+				<SimpleModal
+					message={store.message}
+					title={"Message for you"}
+					clearMessageAfterClose={clearErrorMessage} />
+			}
 		</div>
 	);
 };

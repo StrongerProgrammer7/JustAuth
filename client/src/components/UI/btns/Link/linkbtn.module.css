@@ -1,0 +1,30 @@
+.btn_link
+{
+    background: none;
+    position: absolute;
+
+    font-size: 14px;
+    color: #0066FF;
+    transition: color 0.2s linear;
+}
+
+.btn_link:hover
+{
+    color: #ff00d4;
+    animation: 2s infinite changedSize; 
+}
+@keyframes changedSize 
+{
+    0%
+    {
+        transform:scale(1);
+    }   
+    50%
+    {
+        transform:scale(1.1);
+    } 
+    100%
+    {
+        transform:scale(1);
+    }
+}

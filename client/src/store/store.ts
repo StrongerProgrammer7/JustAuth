@@ -11,7 +11,9 @@ export default class Store
 {
 	user = {} as IUser;
 	isAuth = false;
+	isRegistration = false;
 	isLoad = false;
+	message = "";
 	constructor()
 	{
 		makeAutoObservable(this);
@@ -31,6 +33,16 @@ export default class Store
 	{
 		this.isLoad = load;
 	}
+
+	setRegistration(bool: boolean)
+	{
+		this.isRegistration = bool;
+	}
+
+	setMessage(str: string)
+	{
+		this.message = str;
+	}
 	async login(email: string,password: string) 
 	{
 		try 
@@ -44,9 +56,10 @@ export default class Store
 			if (error instanceof IErrorAxios)
 			{
 				const erAxios = error.errors;
+				this.message = erAxios.response?.data.message || "";
 				return handleError('login',erAxios.response?.data.message,error)(error) as IErrorAxios;
 			}
-
+			this.message = `Unknown error sorry status=${500}:(`;
 			handleError('login',"Unknown error",error);
 		}
 		finally
@@ -59,18 +72,25 @@ export default class Store
 	{
 		try 
 		{
+			this.setLoad(true);
 			const response = await registration(email,password);
 			console.log(response);
 			this.entryUser(response.data);
+			this.message = "Success registration!";
 		} catch (error)
 		{
 			if (error instanceof IErrorAxios)
 			{
 				const erAxios = error.errors;
+				this.message = erAxios.response?.data.message || "";
 				return handleError('registration',erAxios.response?.data.message,error)(error) as IErrorAxios;
 			}
-
+			this.message = `Unknown error sorry status=${500}:(`;
 			handleError('registration',"Unknown error",error);
+		}
+		finally
+		{
+			this.setLoad(false);
 		}
 	}
 
@@ -87,9 +107,10 @@ export default class Store
 			if (error instanceof IErrorAxios)
 			{
 				const erAxios = error.errors;
+				this.message = erAxios.response?.data.message || "";
 				return handleError('logout',erAxios.response?.data.message,error)(error) as IErrorAxios;
 			}
-
+			this.message = `Unknown error sorry status=${500}:(`;
 			handleError('logout',"Unknown error",error);
 		}
 	}
@@ -107,9 +128,10 @@ export default class Store
 			if (error instanceof IErrorAxios)
 			{
 				const erAxios = error.errors;
+				this.message = erAxios.response?.data.message || "";
 				return handleError('checkAuth',erAxios.response?.data.message,error)(error) as IErrorAxios;
 			}
-
+			this.message = `Unknown error sorry status=${500}:(`;
 			handleError('checkAuth',"Unknown error",error);
 		}
 		finally
